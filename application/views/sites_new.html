@@ -1,0 +1,30 @@
+<div>
+    <form class="form-horizontal">
+        <div class="form-group">
+            <input id="act_ime_id" type="hidden" value="0">
+            <label for="txt_name" class="col-sm-1 control-label">推广位</label>
+            <div class="col-sm-6">
+                <select id="combo-promo" class="selectpicker  form-control" data-live-search="true" title="请选择推广位">
+                <?php foreach($promos as $b) {
+                echo "<option value='" . $b["value"] . "'>" . $b["text"] . "</option>";
+                }
+                ?>
+                </select>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="txt_domin" class="col-sm-1 control-label">二级域名</label>
+            <div class="col-sm-6" id="div-combo-product">
+                <input type="text" class="form-control" id="txt_ime_validaty" placeholder="请输入二级域名" value="" />
+            </div>
+          </div>
+        </form>
+</div>
+<div class="row">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-2">
+        <button type="button" class="btn btn-lg btn-primary navbar-btn"> 立即创建 </button>
+    </div>
+</div>
+

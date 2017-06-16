@@ -1,0 +1,23 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond $1 !^(index\.php|sitemap\.xml|robots\.txt|css|js)
+    RewriteRule ^(.*)$ /index.php/$1
+</IfModule>
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteCond %{REQUEST_URI} ^/system.*
+    RewriteRule ^(.*)$ index.php?/$1 [L]
+
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule ^(.*)$ /index.php?/$1 [L]
+</IfModule>
+
+# Turn off mod_security filtering.
+# SecFilterEngine Off
+
+# The below probably isn't needed, but better safe than sorry.
+#SecFilterScanPOST Off

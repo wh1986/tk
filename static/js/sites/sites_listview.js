@@ -1,6 +1,6 @@
 $(function () {
     $('#table').bootstrapTable({
-        idField: 'shop_id',
+        idField: 'website_id',
         columns: [
             {
                 checkbox: true,
@@ -13,8 +13,20 @@ $(function () {
                 align: 'center'
             },
             {
+                field: 'pid',
+                title: 'PID',
+                sortable: true,
+                align: 'center'
+            },
+            {
                 field: 'domain_name',
                 title: '域名',
+                sortable: true,
+                align: 'center'
+            },
+            {
+                field: 'rate_of_yield',
+                title: '分成比例',
                 sortable: true,
                 align: 'center'
             },
@@ -31,9 +43,9 @@ $(function () {
 function operateFormatter(val, row, index) {
     var html = "";
 
-    html += '<a class="delete"  href="javascript:void(0)">解除绑定</a>';
-    html += '&nbsp;';
     html += '<a class="modify"  href="javascript:void(0)">修改分成比例</a>';
+    html += '&nbsp;';
+    html += '<a class="delete"  href="javascript:void(0)">删除</a>';
     html += '&nbsp;';
 
     return html;
@@ -61,52 +73,62 @@ window.operateEvents = {
         get_edit_companies(row.shop_company_id);
 
         $('#modal_edit').modal('show');
-    }, 'click .verify': function (e, value, row, index) {
-        $('#verify_id').val(row.shop_id);
+    }, 'click .delete': function (e, value, row, index) {
+        if(!confirm("确定要删除此记录吗？")) { return; }
 
-        $('#lb_name').html(row.shop_name);
-        $('#lb_area').html(get_area_fname(row.shop_area_id));
-        $('#lb_addr').html(row.shop_addr);
-        $('#lb_tel').html(row.shop_tel);
-        $('#lb_class').html(row.shop_class_name);
-        $('#lb_company').html(row.shop_company_name);
-        $('#lb_state').html(row.shop_state);
-        $('#lb_reason').html(row.shop_refuse_reason);
-
-        $('#img-left').attr('src', row.shop_photo1);
-        $('#img-center').attr('src', row.shop_photo2);
-        $('#img-right').attr('src', row.shop_photo3);
-
-        $('#modal_verify').modal('show');
-    }, 'click .merge': function (e, value, row, index) {
-        $('#merge_id_from').val(row.shop_id);
-
-        var html = "";
-
-        html += " ID：" + row.shop_id;
-        html += " 地区：" + get_area_fname(row.shop_area_id);
-        html += " 名称：" + row.shop_name;
-        html += " 地址：" + row.shop_addr;
-
-        merge_area_opts['area'] = row.shop_area_id;
-        bootstrap_reset_province(merge_area_opts);
-
-        get_merge_shops();
-
-        $('#merge_shop_info').html(html);
-        $('#modal_merge').modal('show');
-    },'click .shop_add_group': function (e, value, row, index) {
-        $('#group_id_from').val(row.shop_id);
-
-        var html = "";
-
-        html += " ID：" + row.shop_id;
-        html += " 地区：" + get_area_fname(row.shop_area_id);
-        html += " 名称：" + row.shop_name;
-
-        $('#group_shop_info').html(html);
-        $('#modal_group').modal('show');
+        var site_id = row.website_id;
+        $.ajax({
+            url:'/ajax/sites/del',
+            type:'post',
+            dataType:'json',
+            data:{ site_id:site_id},
+            success:function(data){
+                if(data['retcode'] == 0) {
+                    toastr.info("操作成功！");
+                    $('#table').bootstrapTable('refresh');
+                } else {
+                    toastr.error(data['msg']);
+                }
+            },
+            error: function(res) {
+                toastr.error("操作失败！");
+            }
+        });
     }
 }
 
+$('#btn-add').click(function(){
+    // var promo = $('#combo-promo').val();
+    var promo  = $('#txt-promo').val().trim();
+    var domain = $('#txt-domain').val().trim();
+    var pid    = $('#txt-pid').val().trim();
+    var ratio  = $('#txt-ratio').val().trim();
 
+    // if(!promo) { toastr.warning("请选择推广位", 1000); return; }
+    if(promo.length == 0) { toastr.warning("请输入推广位", 1000); return; }
+    if(pid.length == 0) { toastr.warning("请输入PID", 1000); return; }
+    if(domain.length == 0) { toastr.warning("请输入二级域名", 1000); return; }
+    if(domain.length > 10) { toastr.warning("二级域名过长, 请输入小于10位", 1000); return; }
+    if(ratio.length == 0) { toastr.warning("请输入分成比例", 1000); return; }
+
+    if(!/[a-zA-Z_0-9]/g.test(domain)) { toastr.warning("二级域名含有非法字符，请确认", 1000); return; }
+
+    $.ajax({
+        url:'/ajax/sites/add',
+        type:'post',
+        dataType:'json',
+        data:{ promo:promo, domain:domain, pid:pid, ratio:ratio },
+        success:function(data){
+            if(data['retcode'] == 0) {
+                toastr.info("操作成功！");
+                $('#table').bootstrapTable('refresh');
+            } else {
+                toastr.error(data['msg']);
+            }
+        },
+        error: function(res) {
+            toastr.error("操作失败！");
+        }
+    });
+
+});

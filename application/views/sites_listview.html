@@ -2,6 +2,10 @@
     <div class="col-lg-12">
         <div id="tb_toolbar" class="btn-toolbar" role="group" aria-label="...">
             <div class="btn-group">
+                <button type="button" data-toggle="modal" data-target="#modal-add"
+                    class="btn btn-primary btn-search">添加网站</button>
+            </div>
+            <div class="btn-group">
               <button type="button" class="btn btn-primary btn-search">修改分成比例</button>
             </div>
         </div>
@@ -14,11 +18,68 @@
            data-search="true"
            data-show-export="true"
            data-show-columns="true"
-           data-detail-view="true"
-           data-detail-formatter="detailFormatter"
            >
         </table>
     </div>
+</div>
+
+<div class="modal fade" id="modal-add" tabindex="-1" role="dialog"
+   aria-labelledby="myModalLabel" aria-hidden="true">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                  &times;
+            </button>
+            <h4 class="modal-title"> 添加网站 </h4>
+         </div>
+         <div id="detail-body" class="modal-body">
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <input id="sites_id" type="hidden" value="0">
+                    <label for="txt_promo" class="col-sm-3 control-label">推广位</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="txt-promo" placeholder="请输入推广位" value="" />
+                        <!--
+                        <select id="combo-promo" class="selectpicker  form-control" data-live-search="true" title="请选择推广位">
+                        <?php foreach($promos as $b) {
+                        //echo "<option value='" . $b["value"] . "'>" . $b["text"] . "</option>";
+                        }
+                        ?>
+                        </select>
+                        -->
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="txt_pid" class="col-sm-3 control-label">PID</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="txt-pid" placeholder="请输入PID" value="" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="txt_domain" class="col-sm-3 control-label">二级域名</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="txt-domain" placeholder="请输入二级域名" value="" />
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label for="txt_ratio" class="col-sm-3 control-label">分成比例</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="txt-ratio" placeholder="请输入分成比例" value="" />
+                    </div>
+                  </div>
+                </form>
+         </div>
+         <div class="modal-footer">
+            <button type="button" class="btn btn-default table-refresh" data-dismiss="modal" id="btn-cacel">
+               取消
+            </button>
+            <button type="button" class="btn btn-primary" id="btn-add">
+               确定
+            </button>
+         </div>
+      </div><!-- /.modal-content -->
+</div><!-- /.modal -->
 </div>
 
 

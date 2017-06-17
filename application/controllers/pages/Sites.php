@@ -28,5 +28,16 @@ class Sites extends CI_Controller {
         
         $this->load->view('dashboard.html', $datas);
     }
+
+    public function listview()
+    {
+        $datas = [
+            'title' => '网站列表',
+            'page'  => 'sites_listview.html',
+            'js'    => 'sites/sites_listview.js',
+        ];
+        
+        $this->load->view('dashboard.html', $datas);
+    }
 }
 

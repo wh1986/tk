@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
+    public function search($cid, $keyword)
+    {
+
+    }
+
     public function exist($GoodsID)
     {
         $this->db->select('count(*) as cnt');
@@ -43,6 +48,7 @@ class Product_model extends Taoke_Model {
                         ->or_like('GoodsID', $query)
                     ->group_end();
         }
+        $this->db->where('Quan_time >', date('Y-m-d H:i:s'));
         $this->db->limit($limit, $offset);
         if($sort) {
             $this->db->order_by($sort, $order);

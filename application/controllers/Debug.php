@@ -10,5 +10,12 @@ class Debug extends CI_Controller {
 
         echo json_encode($top100);
     }
+
+    public function taobao()
+    {
+        $this->load->library('taobao');
+
+        echo json_encode($this->taobao->detail("24358350", "0115701fb9b4a2f3d6f7b1a4a4f6d7dc", "538507879234"));
+    }
 }
 

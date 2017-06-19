@@ -5,8 +5,6 @@ class Dataoke {
     {
         $url = "http://api.dataoke.com/index.php?r=Port/index&type=$type&appkey=$appkey&v=$v&page=$page";
 
-        echo "Url:$url<br/>";
-
         $ch = curl_init();
 
         curl_setopt($ch, CURLOPT_URL, $url);

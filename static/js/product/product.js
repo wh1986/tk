@@ -31,6 +31,30 @@ $(function () {
                 align: 'center'
             },
             {
+                field: 'Sales_num',
+                title: '销量',
+                sortable: true,
+                align: 'center'
+            },
+            {
+                field: 'Commission_jihua',
+                title: '计划佣金',
+                sortable: true,
+                align: 'center'
+            },
+            {
+                field: 'Commission_queqiao',
+                title: '高佣',
+                sortable: true,
+                align: 'center'
+            },
+            {
+                field: 'Quan_surplus',
+                title: '券数量',
+                sortable: true,
+                align: 'center'
+            },
+            {
                 title: '操作',
                 align: 'center',
                 events: operateEvents,

@@ -67,9 +67,11 @@ $(function () {
 function operateFormatter(val, row, index) {
     var html = "";
 
-    html += '<a class="modify"  href="javascript:void(0)">详情</a>';
-    html += '&nbsp;';
-    html += '<a class="delete"  href="javascript:void(0)">删除</a>';
+    if(row.item_url) {
+        html += '<a class="detail" target="_blank" href="' + row.item_url + '">详情</a>';
+    } else {
+        html += '<span>详情</span>';
+    }
     html += '&nbsp;';
 
     return html;

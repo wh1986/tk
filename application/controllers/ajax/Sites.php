@@ -41,6 +41,8 @@ class Sites extends CI_Controller {
             'domain_name'      => $this->input->post('domain'),
         ];
 
+        var_dump($data);
+
         echo json_encode($this->Sites_model->add($data));
     }
 

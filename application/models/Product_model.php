@@ -15,6 +15,25 @@ class Product_model extends Taoke_Model {
         return $this->db->get('Product')->row()->cnt > 0;
     }
 
+    public function get_product($GoodsID)
+    {
+        $this->db->select('*')->from('Product')
+            ->where('GoodsID', $GoodsID)
+            ->limit(1);
+
+        return $this->db->get()->row();
+    }
+
+    public function get_taobao_cmd($GoodsID, $PID, $QuanID)
+    {
+        $this->db->select('*')->from('ProductModel')
+            ->where('ProductId', $GoodsID)
+            ->where('pid', $PID)
+            ->where('Quan_id', $QuanID)
+            ->limit(1);
+        return $this->db->get()->row();
+    }
+
     public function add($row)
     {
         if($this->exist($row->GoodsID)){

@@ -3,6 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Sites_model extends Taoke_Model {
 
+    public function get_by_domain($domain)
+    {
+        return $this->db->where('domain_name', $domain)
+            ->limit(1)
+            ->get('websites')->row();
+    }
+
     public function add($data)
     {
         $is_exist = $this->db->select('count(*) as cnt')

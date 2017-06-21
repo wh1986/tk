@@ -16,5 +16,27 @@ class Taobao {
 
         return $resp;
     }
+
+    public function genernate_product_url($product_id, $pid, $coupon_id)
+    {
+        return "https://uland.taobao.com/coupon/edetail?activityId=$coupon_id&pid=$pid&itemId=$product_id";
+    }
+
+    public function tpwd($appkey, $secret, $logo, $url, $text)
+    {
+        $c            = new TopClient;
+        $c->appkey    = $appkey;
+        $c->secretKey = $secret;
+
+        $req = new WirelessShareTpwdCreateRequest;
+
+        $tpwd_param = new GenPwdIsvParamDto;
+        $tpwd_param->logo = $logo;
+        $tpwd_param->url  = $url;
+        $tpwd_param->text = $text;
+
+        $req->setTpwdParam(json_encode($tpwd_param));
+        $resp = $c->execute($req);
+    }
 }
 

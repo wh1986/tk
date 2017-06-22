@@ -37,6 +37,8 @@ class Taobao {
 
         $req->setTpwdParam(json_encode($tpwd_param));
         $resp = $c->execute($req);
+
+        return $resp;
     }
 }
 

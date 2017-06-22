@@ -2,9 +2,22 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
-    public function search($cid, $keyword)
+    public function search($cid, $keyword, $limit, $offset, $order, $sort)
     {
+        if($cid) {
+            $this->db->where('cid', $cid);
+        }
+        if($keyword){
+            $this->db->like('Title', $keyword);
+        }
 
+        if($order) {
+            $this->db->order_by($order, $sort);
+        }
+
+        $this->db->limit($limit, $offset);
+
+        return $this->db->get('Product')->result();
     }
 
     public function exist($GoodsID)
@@ -23,6 +36,8 @@ class Product_model extends Taoke_Model {
 
         return $this->db->get()->row();
     }
+
+    // public function get_tpwd($)
 
     public function get_taobao_cmd($GoodsID, $PID, $QuanID)
     {

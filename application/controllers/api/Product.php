@@ -6,7 +6,8 @@ class Product extends CI_Controller {
     {
         $this->load->model('product_model');
 
-        echo json_encode($this->product_model->GetCategories());
+        $data = $this->product_model->GetCategories();
+        response_exit(0, 'OK', $data);
     }
 
     protected function product_to_json($p)
@@ -79,8 +80,8 @@ class Product extends CI_Controller {
         $product_url = $this->taobao->genernate_product_url(
                                     $ProductId, $pid, $product->Quan_id);
 
-        $title = $product->Title . "\n原价" . $product->Org_Price .
-            "元,抢券立省" . $product->Quan_price . "元";
+        $title = $product->D_title . "\n原价" . $product->Org_Price .
+            "元\n抢券立省" . $product->Quan_price . "元";
         $tpwd = $this->taobao->tpwd(
             "24358350", "0115701fb9b4a2f3d6f7b1a4a4f6d7dc",
             $product->Pic, $product_url, $title);

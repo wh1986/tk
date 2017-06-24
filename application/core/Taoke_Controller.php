@@ -20,3 +20,20 @@ class Taoke_Controller extends CI_Controller {
     }
 }
 
+class Ajax_Controller extends CI_Controller {
+    protected $user_id = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+    }
+
+    public function check_session()
+    {
+        $this->user_id = $this->session->userdata('user_id');
+        if(!$this->user_id) {
+            response_exit(-2, "您未登录，请先登录!");
+        }
+    }
+}
+

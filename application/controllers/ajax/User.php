@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class User extends CI_Controller {
+class User extends Ajax_Controller {
     public function login()
     {
         $this->load->model('user_model');
@@ -28,6 +28,19 @@ class User extends CI_Controller {
     {
         $this->session->unset_userdata('user_id');
         header("location:/pages/login");
+    }
+
+    public function modify_pwd()
+    {
+        $this->check_session();
+
+        $this->load->model('user_model');
+
+        $pwd_old = $this->input->post('pwd_old');
+        $pwd_new = $this->input->post('pwd_new');
+
+        $result = $this->user_model->modify_pwd($this->user_id, $pwd_old, $pwd_new);
+        echo json_encode($result);
     }
 }
 

@@ -12,5 +12,14 @@ class User_model extends Taoke_Model {
 
         return $this->db->get()->row();
     }
+
+    public function modify_pwd($user_id, $pwd_old, $pwd_new)
+    {
+        $this->db->where('user_id', $user_id)
+            ->where('user_password', md5($pwd_old));
+        $this->db->update('user_account', ['user_password' => md5($pwd_new)]);
+
+        return $this->insert_return();
+    }
 }
 

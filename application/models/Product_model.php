@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
+    public function GetCategories()
+    {
+        return $this->db->get('ProductCategory')->result_array();
+    }
+
     public function search($cid, $keyword, $limit, $offset, $order, $sort)
     {
         if($cid) {

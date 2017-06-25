@@ -43,7 +43,7 @@ $(function () {
 function operateFormatter(val, row, index) {
     var html = "";
 
-    html += '<a class="modify"  href="javascript:void(0)">修改分成比例</a>';
+    html += '<a class="modify"  href="javascript:void(0)">修改</a>';
     html += '&nbsp;';
     html += '<a class="delete"  href="javascript:void(0)">删除</a>';
     html += '&nbsp;';
@@ -52,27 +52,17 @@ function operateFormatter(val, row, index) {
 }
 
 window.operateEvents = {
-    'click .edit': function (e, value, row, index) {
-        $('#edit_id').val(row.shop_id);
+    'click .modify': function (e, value, row, index) {
+        $('#sites_id').val(row.website_id);
 
-        $('#txt_name').val(row.shop_name);
-        // $('#txt_area').html(get_area_fname(row.shop_area_id));
-        $('#txt_addr').val(row.shop_addr);
-        $('#txt_tel').val(row.shop_tel);
-        $('#shop_lat').val(row.shop_lat);
-        $('#shop_lng').val(row.shop_lng);
-        $('#txt_mgr_name').val(row.shop_manager_name);
-        $('#txt_mgr_tel').val(row.shop_manager_tel);
-        $('#combo_shop_class').val(row.shop_class_id);
-        $('#home_center').val(row.shop_home_center);
-        $('#combo_shop_class').selectpicker('render');
+        var domain_name = row.domain_name.split(".")[0];
 
-        edit_area_opts['area'] = row.shop_area_id;
-        bootstrap_reset_province(edit_area_opts);
+        $('#txt-promo').val(row.advertising_spot);
+        $('#txt-domain').val(domain_name);
+        $('#txt-pid').val(row.pid);
+        $('#txt-ratio').val(row.rate_of_yield);
 
-        get_edit_companies(row.shop_company_id);
-
-        $('#modal_edit').modal('show');
+        $('#modal-add').modal('show');
     }, 'click .delete': function (e, value, row, index) {
         if(!confirm("确定要删除此记录吗？")) { return; }
 
@@ -97,12 +87,24 @@ window.operateEvents = {
     }
 }
 
+$('#btn-add-show').click(function(){
+    $('#sites_id').val(-1);
+
+    $('#txt-promo').val('');
+    $('#txt-domain').val('');
+    $('#txt-pid').val('');
+    $('#txt-ratio').val('');
+
+    $('#modal-add').modal('show');
+});
+
 $('#btn-add').click(function(){
     // var promo = $('#combo-promo').val();
     var promo  = $('#txt-promo').val().trim();
     var domain = $('#txt-domain').val().trim();
     var pid    = $('#txt-pid').val().trim();
     var ratio  = $('#txt-ratio').val().trim();
+    var site_id = $('#sites_id').val();
 
     // if(!promo) { toastr.warning("请选择推广位", 1000); return; }
     if(promo.length == 0) { toastr.warning("请输入推广位"); return; }
@@ -117,10 +119,14 @@ $('#btn-add').click(function(){
         url:'/ajax/sites/add',
         type:'post',
         dataType:'json',
-        data:{ promo:promo, domain:domain, pid:pid, ratio:ratio },
+        data:{ site_id:site_id, promo:promo,
+            domain:domain + $('#combo-domain').val(), pid:pid, ratio:ratio },
         success:function(data){
             if(data['retcode'] == 0) {
                 toastr.info("操作成功！");
+                if(site_id > 0) {
+                    $('#modal-add').modal('hide');
+                }
                 $('#table').bootstrapTable('refresh');
             } else {
                 toastr.error(data['msg']);

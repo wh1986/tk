@@ -2,8 +2,7 @@
     <div class="col-lg-12">
         <div id="tb_toolbar" class="btn-toolbar" role="group" aria-label="...">
             <div class="btn-group">
-                <button type="button" data-toggle="modal" data-target="#modal-add"
-                    class="btn btn-primary btn-search">添加网站</button>
+                <button type="button" id="btn-add-show" class="btn btn-primary btn-search">添加网站</button>
             </div>
             <div class="btn-group">
               <button type="button" class="btn btn-primary btn-search">修改分成比例</button>
@@ -57,9 +56,18 @@
                     </div>
                   </div>
                   <div class="form-group">
-                    <label for="txt_domain" class="col-sm-3 control-label">二级域名</label>
-                    <div class="col-sm-9">
+                    <label for="txt_domain" class="col-sm-3 control-label">域名</label>
+                    <div class="col-sm-3">
                         <input type="text" class="form-control" id="txt-domain" placeholder="请输入二级域名" value="" />
+                    </div>
+                    <div class="col-sm-6">
+                        <select id="combo-domain" class="selectpicker  form-control" data-live-search="true">
+                            <option>.mytaoke.cn</option>
+                        <?php foreach($promos as $b) {
+                        //echo "<option value='" . $b["value"] . "'>" . $b["text"] . "</option>";
+                        }
+                        ?>
+                        </select>
                     </div>
                   </div>
                   <div class="form-group">

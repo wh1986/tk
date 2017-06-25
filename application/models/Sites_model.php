@@ -10,12 +10,41 @@ class Sites_model extends Taoke_Model {
             ->get('websites')->row();
     }
 
+    public function modify($site_id, $user_id, $data)
+    {
+        $is_exist = $this->db->select('count(*) as cnt')
+            ->from('websites')
+            ->where('website_id != ', $site_id)
+            ->where('pid', $data['pid'])
+            ->or_group_start()
+                ->where('website_id != ', $site_id)
+                ->where('user_id', $data['user_id'])
+                ->where('advertising_spot', $data['advertising_spot'])
+            ->group_end()
+            ->or_where('domain_name', $data['domain_name'])
+            ->get()->row()->cnt;
+
+        if($is_exist) {
+            return $this->std_return(-1, "操作失败, 已经存在该记录");
+        }
+
+        $this->db->where('user_id', $user_id);
+        $this->db->where('website_id', $site_id);
+
+        $this->db->update('websites', $data);
+
+        return $this->insert_return();
+    }
+
     public function add($data)
     {
         $is_exist = $this->db->select('count(*) as cnt')
             ->from('websites')
-            ->where('advertising_spot', $data['advertising_spot'])
-            ->or_where('pid', $data['pid'])
+            ->where('pid', $data['pid'])
+            ->or_group_start()
+                ->where('user_id', $data['user_id'])
+                ->where('advertising_spot', $data['advertising_spot'])
+            ->group_end()
             ->or_where('domain_name', $data['domain_name'])
             ->get()->row()->cnt;
 

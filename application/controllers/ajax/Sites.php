@@ -35,6 +35,7 @@ class Sites extends Ajax_Controller {
     {
         $this->check_session();
         // 检查参数
+        $site_id = (int)$this->input->post('site_id');
 
         $data = [
             'user_id'          => $this->user_id,
@@ -42,11 +43,14 @@ class Sites extends Ajax_Controller {
             'pid'              => $this->input->post('pid'),
             'rate_of_yield'    => $this->input->post('ratio'),
             'domain_name'      => $this->input->post('domain'),
+            'domain_name_personal' => ''
         ];
 
-        // var_dump($data);
-
-        echo json_encode($this->Sites_model->add($data));
+        if($site_id > 0) {
+            echo json_encode($this->Sites_model->modify($site_id, $this->user_id, $data));
+        } else {
+            echo json_encode($this->Sites_model->add($data));
+        }
     }
 
     public function del()

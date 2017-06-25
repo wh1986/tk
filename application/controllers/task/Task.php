@@ -37,7 +37,7 @@ class Task extends CI_Controller {
                         $cnt = sizeof($item->small_images->string);
                         $imgs = '';
                         for($i = 0; $i < $cnt; $i++) {
-                            $imgs = $imgs . $item->small_images->string[i] . ',';
+                            $imgs = $imgs . $item->small_images->string[$i] . ',';
                         }
                         $r->small_images = $imgs;
                     }

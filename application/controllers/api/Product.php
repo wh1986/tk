@@ -41,10 +41,11 @@ class Product extends Api_Controller {
         $offset  = (int)$this->input->get('offset');
         $order   = (int)$this->input->get('order');
         $sort    = (int)$this->input->get('sort');
+        $seller_id = $this->input->get('SellerID');
 
         if($limit == 0 || $limit > 20) { $limit = 20; }
 
-        $products = $this->product_model->search($cid, $keyword, $limit, $offset, $order, $sort);
+        $products = $this->product_model->search($cid, $keyword, $seller_id, $limit, $offset, $order, $sort);
         $resp['retcode'] = 0;
         $resp['msg']     = 'OK';
         $resp['cnt']     = sizeof($products);

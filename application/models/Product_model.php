@@ -7,11 +7,16 @@ class Product_model extends Taoke_Model {
         return $this->db->get('ProductCategory')->result_array();
     }
 
-    public function search($cid, $keyword, $limit, $offset, $order, $sort)
+    public function search($cid, $keyword, $seller_id, $limit, $offset, $order, $sort)
     {
         if($cid) {
             $this->db->where('cid', $cid);
         }
+
+        if($seller_id) {
+            $this->db->where('SellerID', $seller_id);
+        }
+
         if($keyword){
             $this->db->like('Title', $keyword);
         }

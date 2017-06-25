@@ -21,7 +21,10 @@ class Sites_model extends Taoke_Model {
                 ->where('user_id', $data['user_id'])
                 ->where('advertising_spot', $data['advertising_spot'])
             ->group_end()
-            ->or_where('domain_name', $data['domain_name'])
+            ->or_group_start()
+                ->where('website_id != ', $site_id)
+                ->where('domain_name', $data['domain_name'])
+            ->group_end()
             ->get()->row()->cnt;
 
         if($is_exist) {

@@ -92,11 +92,18 @@ class Product extends Api_Controller {
         $product_url = $this->taobao->genernate_product_url(
                                     $ProductId, $pid, $product->Quan_id);
 
-        $title = $product->D_title . "\n原价" . $product->Org_Price .
-            "元\n抢券立省" . $product->Quan_price . "元";
+        $D_title = $product->D_title;
+        if(mb_strlen($D_title) > 10) {
+            $D_title = mb_substr($D_title, 0, 10) . "...";
+        }
+
+        $title = $D_title . "\n原价" . $product->Org_Price .
+            "元,抢券立省" . $product->Quan_price . "元";
         $tpwd = $this->taobao->tpwd(
             "24358350", "0115701fb9b4a2f3d6f7b1a4a4f6d7dc",
             $product->Pic, $product_url, $title);
+
+        // echo $title;
 
         $data = $this->product_to_json($product);
         $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd->model";

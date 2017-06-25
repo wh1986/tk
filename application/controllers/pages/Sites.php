@@ -14,5 +14,18 @@ class Sites extends Taoke_Controller {
 
         $this->load->view('dashboard.html', $datas);
     }
+
+    public function settings()
+    {
+        $datas = [
+            'title' => '网站设置',
+            'page'  => 'sites_settings.html',
+            'js'    => 'sites/sites_settings.js',
+        ];
+
+        $this->add_user_info($datas);
+
+        $this->load->view('dashboard.html', $datas);
+    }
 }
 

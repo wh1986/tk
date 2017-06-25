@@ -1,24 +1,88 @@
 <div class="row">
     <div class="col-lg-12">
-        <div id="tb_toolbar" class="btn-toolbar" role="group" aria-label="...">
-            <div class="btn-group">
-                <button type="button" id="btn-add-show" class="btn btn-primary btn-search">添加网站</button>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <label for="txt-name" class="col-sm-2 control-label">网站名称</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="txt-name" placeholder="请输入网站名称" value="<?php echo $name; ?>" />
+                </div>
             </div>
-            <div class="btn-group">
-              <button type="button" class="btn btn-primary btn-search">修改分成比例</button>
+            <!--
+            <div class="form-group">
+                <label for="txt_logo" class="col-sm-2 control-label">LOGO</label>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <input type="text" class="form-control" readonly id="txt-logo-file" />
+                        <span type="button" class="btn input-group-addon" id="btn-logo-file">浏览</span>
+                        <input type="file" id="logo-file" style="display:none" />
+
+                    </div>
+                </div>
             </div>
-        </div>
-        <table id="table"
-           data-toolbar="#tb_toolbar"
-           data-url="/ajax/sites/listview"
-           data-side-pagination="server"
-           data-pagination="true"
-           data-page-list="[10, 25, 50, 100]"
-           data-search="true"
-           data-show-export="true"
-           data-show-columns="true"
-           >
-        </table>
+            -->
+            <div class="form-group">
+                <label for="txt-domain" class="col-sm-2 control-label">私有域名</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="txt-domain" placeholder="请输入私有域名（可不填）" value="<?php echo $domain; ?>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="txt-appkey" class="col-sm-2 control-label">阿里AppKey</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="txt-appkey" placeholder="请输入阿里AppKey" value="<?php echo $appkey; ?>" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="txt-secret" class="col-sm-2 control-label">阿里Secret</label>
+                <div class="col-sm-4">
+                    <input type="text" class="form-control" id="txt-secret" placeholder="请输入阿里Secret" value="<?php echo $secret; ?>" />
+                </div>
+            </div>
+        </form>
     </div>
 </div>
+<div class="row">
+    <div class="col-sm-2">  </div>
+    <div class="col-sm-4">
+        <button type="button" class="btn btn-primary" id="btn-ok"> 确定 </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+    $('#btn-logo-file').click(function() {
+        $('#logo-file').trigger('click');
+    });
+
+    var file_upload = null;
+    $('#logo-file').change(function() {
+        file_upload = this.files[0];
+        console.info(file_upload);
+        $('#txt-logo-file').val(file_upload["name"]);
+    });
+
+$('#btn-ok').click(function(){
+    var name        = $('#txt-name').val().trim();
+    var domain_name = $('#txt-domain').val().trim();
+    var appkey      = $('#txt-appkey').val().trim();
+    var secret      = $('#txt-secret').val().trim();
+
+    $.ajax({
+        url:'/ajax/sites/config',
+        type:'post',
+        dataType:'json',
+        data:{name:name, domain_name:domain_name, appkey:appkey, secret:secret},
+        success:function(data){
+            if(data['retcode'] == 0) {
+                toastr.info("操作成功！");
+            } else {
+                toastr.error(data['msg']);
+            }
+        },
+        error: function(res) {
+            toastr.error("操作失败！");
+        }
+    });
+});
+
+</script>
 

@@ -2,10 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Taoke_Controller extends CI_Controller {
+    protected $user_id;
     public function __construct() {
         parent::__construct();
-        $user_id = $this->session->userdata('user_id');
-        if(!$user_id) {
+        $this->user_id = $this->session->userdata('user_id');
+        if(!$this->user_id) {
             header('location:/pages/login');
             exit;
         }

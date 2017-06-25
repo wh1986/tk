@@ -2,6 +2,25 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Sites_model extends Taoke_Model {
+    public function update_config($data)
+    {
+        $this->db->where('user_id', $data['user_id']);
+        if($this->db->get('web_config')->row()) {
+            $this->db->where('user_id', $data['user_id']);
+            $this->db->update('web_config', $data);
+            return $this->update_return();
+        } else {
+            $this->db->insert('web_config', $data);
+            return $this->insert_return();
+        }
+    }
+
+    public function get_config_by_userid($user_id)
+    {
+        $this->db->where('user_id', $user_id);
+
+        return $this->db->get('web_config')->row();
+    }
 
     public function get_config($domain)
     {

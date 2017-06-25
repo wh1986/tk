@@ -20,5 +20,14 @@ class Taoke_Model extends CI_Model {
             return $this->std_return(-1, '操作失败');
         }
     }
+
+    public function update_return()
+    {
+        if($this->db->affected_rows()) {
+            return $this->std_return(0, 'OK');
+        } else {
+            return $this->std_return(-1, '操作失败（有可能未改变值)');
+        }
+    }
 }
 

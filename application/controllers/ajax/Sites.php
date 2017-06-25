@@ -8,6 +8,21 @@ class Sites extends Ajax_Controller {
         $this->load->model('Sites_model');
     }
 
+    public function config()
+    {
+        $this->check_session();
+
+        $data = [
+            'user_id'   => $this->user_id,
+            'web_name'    => $this->input->post('name'),
+            'domain_name' => $this->input->post('domain_name'),
+            'ali_appkey'  => $this->input->post('appkey'),
+            'ali_secret'  => $this->input->post('secret'),
+        ];
+
+        echo json_encode($this->Sites_model->update_config($data));
+    }
+
     public function listview()
     {
         $this->check_session();

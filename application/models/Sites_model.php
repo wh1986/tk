@@ -3,6 +3,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Sites_model extends Taoke_Model {
 
+    public function get_config($domain)
+    {
+        $this->db->where('websites.domain_name', $domain)
+            ->from('websites')
+            ->join('web_config', 'websites.user_id = web_config.user_id');
+
+        return $this->db->get()->row();
+    }
+
     public function get_by_domain($domain)
     {
         return $this->db->where('domain_name', $domain)

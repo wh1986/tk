@@ -7,7 +7,7 @@ class Product extends Api_Controller {
         $this->load->model('product_model');
 
         $data = $this->product_model->GetCategories();
-        foreach($data as $r) {
+        foreach($data as &$r) {
             $r['icon'] = 'http://cms.mytaoke.cn/static/icons/' . $r['icon'];
         }
 
@@ -27,6 +27,7 @@ class Product extends Api_Controller {
             "small_images" => $p->small_images,
             "user_type"    => $p->user_type,
             "provcity"     => $p->provcity,
+            "Introduce"    => $p->Introduce,
         ];
     }
 

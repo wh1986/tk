@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Product extends CI_Controller {
+class Product extends Api_Controller {
     public function GetCategories()
     {
         $this->load->model('product_model');
@@ -13,13 +13,16 @@ class Product extends CI_Controller {
     protected function product_to_json($p)
     {
         return [
-            'ProductId' => $p->GoodsID,
-            'Title' => $p->Title,
-            "OrgPrice" => $p->Org_Price,
-            "Price" => $p->Price,
-            "SalesNum" => $p->Sales_num,
-            "QuanPrice" => $p->Quan_price,
-            "PicUrl" => $p->Pic
+            'ProductId'    => $p->GoodsID,
+            'Title'        => $p->Title,
+            "OrgPrice"     => $p->Org_Price,
+            "Price"        => $p->Price,
+            "SalesNum"     => $p->Sales_num,
+            "QuanPrice"    => $p->Quan_price,
+            "PicUrl"       => $p->Pic,
+            "small_images" => $p->small_images,
+            "user_type"    => $p->user_type,
+            "provcity"     => $p->provcity,
         ];
     }
 
@@ -56,7 +59,7 @@ class Product extends CI_Controller {
         $this->load->library('taobao');
 
         $domain = "test";
-        $pid = "defaultpid";
+        $pid    = "defaultpid";
 
         // 根据域名获取pid
         $site = $this->sites_model->get_by_domain($domain);
@@ -66,7 +69,9 @@ class Product extends CI_Controller {
 
         // 获取商品信息
         $ProductId = $this->input->post("ProductId");
-        $ProductId = 553564234610;
+        if(!$ProductId) {
+            $ProductId = $this->input->get("ProductId");
+        }
         if(!$ProductId) {
             response_exit(-1, 'please input product id');
         }

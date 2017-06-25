@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
-class Sites extends CI_Controller {
+class Sites extends Ajax_Controller {
     function __construct()
     {
         parent::__construct();
@@ -10,8 +10,10 @@ class Sites extends CI_Controller {
 
     public function listview()
     {
+        $this->check_session();
+
         $rows = $this->Sites_model->table_rows(
-            '',
+            $this->user_id,
             $this->input->get('search'),
             $this->input->get('offset'),
             $this->input->get('limit'),
@@ -20,7 +22,7 @@ class Sites extends CI_Controller {
         );
 
         $resp["total"] = $this->Sites_model->table_count(
-            '',
+            $this->user_id,
             $this->input->get('search')
         );
         $resp["rows"] = $rows;
@@ -31,10 +33,11 @@ class Sites extends CI_Controller {
 
     public function add()
     {
+        $this->check_session();
         // 检查参数
 
-        //
         $data = [
+            'user_id'          => $this->user_id,
             'advertising_spot' => $this->input->post('promo'),
             'pid'              => $this->input->post('pid'),
             'rate_of_yield'    => $this->input->post('ratio'),
@@ -48,7 +51,12 @@ class Sites extends CI_Controller {
 
     public function del()
     {
-        echo json_encode($this->Sites_model->del($this->input->post('site_id')));
+        $this->check_session();
+
+        echo json_encode($this->Sites_model->del(
+            $this->user_id,
+            $this->input->post('site_id')
+        ));
     }
 }
 

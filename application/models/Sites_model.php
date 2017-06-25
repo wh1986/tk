@@ -28,9 +28,9 @@ class Sites_model extends Taoke_Model {
         return $this->insert_return();
     }
 
-    public function del($site_id)
+    public function del($user_id, $site_id)
     {
-        $this->db->delete('websites', ['website_id' => $site_id]);
+        $this->db->delete('websites', ['user_id' => $user_id, 'website_id' => $site_id]);
 
         return $this->insert_return();
     }
@@ -52,6 +52,7 @@ class Sites_model extends Taoke_Model {
         $this->load->database();
         $this->db->select("*");
         $this->db->from("websites");
+        $this->db->where('user_id', $user);
         if($query) {
             $this->db->group_start()
                         ->or_like('advertising_spot', $query)
@@ -81,6 +82,7 @@ class Sites_model extends Taoke_Model {
         $this->db->select("count(*) as cnt");
         $this->db->from("websites");
 
+        $this->db->where('user_id', $user);
         if($query) {
             $this->db->group_start()
                         ->or_like('advertising_spot', $query)

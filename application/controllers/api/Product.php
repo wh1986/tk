@@ -30,12 +30,12 @@ class Product extends Api_Controller {
     {
         $this->load->model('product_model');
 
-        $cid     = $this->input->post('cid');
-        $keyword = $this->input->post('keyword');
-        $limit   = (int)$this->input->post('limit');
-        $offset  = (int)$this->input->post('offset');
-        $order   = (int)$this->input->post('order');
-        $sort    = (int)$this->input->post('sort');
+        $cid     = $this->input->get('cid');
+        $keyword = urldecode($this->input->get('keyword'));
+        $limit   = (int)$this->input->get('limit');
+        $offset  = (int)$this->input->get('offset');
+        $order   = (int)$this->input->get('order');
+        $sort    = (int)$this->input->get('sort');
 
         if($limit == 0 || $limit > 20) { $limit = 20; }
 

@@ -26,7 +26,7 @@ class Product extends Api_Controller {
         ];
     }
 
-    public function getproducts()
+    public function search()
     {
         $this->load->model('product_model');
 

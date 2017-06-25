@@ -65,7 +65,7 @@ class Product extends Api_Controller {
         $this->load->model('sites_model');
         $this->load->library('taobao');
 
-        $domain = "test";
+        $domain = "gaoshiqing.mytaoke.cn";
         $pid    = "defaultpid";
 
         // 根据域名获取pid

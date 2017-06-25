@@ -58,7 +58,7 @@
             data:{name:name, pwd:pwd},
             success:function(data){
                 if(data['retcode'] == 0) {
-                    window.location.href = '/pages/product/';
+                    window.location.href = '/pages/sites/index';
                 } else {
                     toastr.error(data['msg']);
                 }

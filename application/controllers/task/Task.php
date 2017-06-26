@@ -43,6 +43,7 @@ class Task extends CI_Controller {
                     }
                 }
 
+                $r->utime = date('Y-m-d H:i:s');
                 $this->product_model->add($r);
             }
 

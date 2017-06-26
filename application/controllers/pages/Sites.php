@@ -4,10 +4,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Sites extends Taoke_Controller {
     public function index()
     {
+        $this->load->model('sites_model');
+
+        $config = $this->sites_model->get_config_by_userid($this->user_id);
         $datas = [
             'title' => '网站管理',
             'page'  => 'sites_listview.html',
             'js'    => 'sites/sites_listview.js',
+            'domain' => $config ? $config->domain_name : null,
         ];
 
         $this->add_user_info($datas);

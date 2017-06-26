@@ -121,6 +121,7 @@ class Product_model extends Taoke_Model {
                         ->or_like('GoodsID', $query)
                     ->group_end();
         }
+        $this->db->where('Quan_time >', date('Y-m-d H:i:s'));
 
         return $this->db->get()->row()->cnt;
     }

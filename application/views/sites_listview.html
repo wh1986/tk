@@ -58,12 +58,11 @@
                         <input type="text" class="form-control" id="txt-domain" placeholder="请输入二级域名" value="" />
                     </div>
                     <div class="col-sm-6">
-                        <select id="combo-domain" class="selectpicker  form-control" data-live-search="true">
+                        <select id="combo-domain" class="selectpicker  form-control">
                             <option>.mytaoke.cn</option>
-                        <?php foreach($promos as $b) {
-                        //echo "<option value='" . $b["value"] . "'>" . $b["text"] . "</option>";
-                        }
-                        ?>
+                            <?php if(isset($domain) && $domain):?>
+                            <option>.<?php echo $domain; ?></option>
+                            <?php endif ?>
                         </select>
                     </div>
                   </div>

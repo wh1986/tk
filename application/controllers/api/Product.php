@@ -75,7 +75,6 @@ class Product extends Api_Controller {
             $domain = str_replace("http://", "", $domain);
             $domain = str_replace("https://", "", $domain);
         }
-        $domain1 = $domain;
 
         $pid = "defaultpid";
 

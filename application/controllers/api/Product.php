@@ -66,7 +66,6 @@ class Product extends Api_Controller {
         $this->load->library('taobao');
 
         $domain = $this->input->get_request_header('Origin');
-        $domain1 = $domain;
         if(!$domain) {
             $domain = $this->input->get('domain');
             if(!$domain) {
@@ -76,6 +75,7 @@ class Product extends Api_Controller {
             $domain = str_replace("http://", "", $domain);
             $domain = str_replace("https://", "", $domain);
         }
+        $domain1 = $domain;
 
         $pid = "defaultpid";
 
@@ -125,7 +125,6 @@ class Product extends Api_Controller {
         $data = $this->product_to_json($product);
         $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd->model";
         $data['domain'] = $domain1;
-        $data["headers"] = $this->input->request_headers();
 
         response_exit(0, 'OK', $data);
     }

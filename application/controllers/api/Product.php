@@ -29,6 +29,7 @@ class Product extends Api_Controller {
             "provcity"     => $p->provcity,
             "Introduce"    => $p->Introduce,
             "SellerID"     => $p->SellerID,
+            "Cid"          => $p->Cid,
         ];
     }
 

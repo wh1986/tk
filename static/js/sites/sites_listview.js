@@ -24,12 +24,13 @@ $(function () {
                 sortable: true,
                 align: 'center'
             },
+            /*
             {
                 field: 'rate_of_yield',
                 title: '分成比例',
                 sortable: true,
                 align: 'center'
-            },
+            }, */
             {
                 title: '操作',
                 align: 'center',

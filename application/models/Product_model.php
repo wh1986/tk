@@ -16,6 +16,7 @@ class Product_model extends Taoke_Model {
         if($seller_id) {
             $this->db->where('SellerID', $seller_id);
         }
+        $this->db->where('Quan_time >', date('Y-m-d H:i:s'));
 
         if($keyword){
             $this->db->like('Title', $keyword);

@@ -65,9 +65,15 @@ class Product extends Api_Controller {
         $this->load->model('sites_model');
         $this->load->library('taobao');
 
-        $domain = $this->input->get('domain');
+        $domain = $this->input->get_request_header('Origin');
         if(!$domain) {
-            $domain = "gaoshiqing.mytaoke.cn";
+            $domain = $this->input->get('domain');
+            if(!$domain) {
+                $domain = "gaoshiqing.mytaoke.cn";
+            }
+        } else {
+            $domain = str_replace("http://", "", $domain);
+            $domain = str_replace("https://", "", $domain);
         }
 
         $pid = "defaultpid";
@@ -76,6 +82,12 @@ class Product extends Api_Controller {
         $site = $this->sites_model->get_by_domain($domain);
         if($site) {
             $pid = $site->pid;
+        } else {
+            $domain = "gaoshiqing.mytaoke.cn";
+            $site = $this->sites_model->get_by_domain($domain);
+            if($site) {
+                $pid = $site->pid;
+            }
         }
 
         // 获取商品信息

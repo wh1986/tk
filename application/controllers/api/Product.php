@@ -123,6 +123,7 @@ class Product extends Api_Controller {
 
         $data = $this->product_to_json($product);
         $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd->model";
+        $data['domain'] = $domain;
 
         response_exit(0, 'OK', $data);
     }

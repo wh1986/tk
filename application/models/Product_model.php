@@ -33,7 +33,10 @@ class Product_model extends Taoke_Model {
         $this->db->where('Quan_time >', date('Y-m-d H:i:s'));
 
         if($keyword){
-            $this->db->like('Title', $keyword);
+            $kws = explode(' ', $keyword);
+            foreach($kws as $kw) {
+                $this->db->like('Title', $kw);
+            }
         }
 
         if($order) {

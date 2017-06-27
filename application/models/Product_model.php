@@ -2,7 +2,7 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
-    public function add_visit_count($ProductId) 
+    public function add_visit_count($ProductId)
     {
 
     }
@@ -12,7 +12,7 @@ class Product_model extends Taoke_Model {
         return $this->db->get('ProductCategory')->result_array();
     }
 
-    public function search($cid, $keyword, $seller_id, $limit, $offset, $order, $sort)
+    public function search($cid, $keyword, $seller_id, $price_min, $price_max, $limit, $offset, $order, $sort)
     {
         if($cid) {
             $this->db->where('cid', $cid);
@@ -21,6 +21,15 @@ class Product_model extends Taoke_Model {
         if($seller_id) {
             $this->db->where('SellerID', $seller_id);
         }
+
+        if($price_min) {
+            $this->db->where('Price >= ', $price_min);
+        }
+
+        if($price_max) {
+            $this->db->where('Price <= ', $price_max);
+        }
+
         $this->db->where('Quan_time >', date('Y-m-d H:i:s'));
 
         if($keyword){

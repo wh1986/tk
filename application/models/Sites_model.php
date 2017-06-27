@@ -38,6 +38,11 @@ class Sites_model extends Taoke_Model {
             ->get('websites')->row();
     }
 
+    public function get_by_pid($pid)
+    {
+        return $this->db->where('pid', $pid)->get('websites')->result();
+    }
+
     public function modify($site_id, $user_id, $data)
     {
         $is_exist = $this->db->select('count(*) as cnt')

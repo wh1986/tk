@@ -44,10 +44,12 @@ class Product extends Api_Controller {
         $order   = (int)$this->input->get('order');
         $sort    = (int)$this->input->get('sort');
         $seller_id = $this->input->get('SellerID');
+        $price_min = (double)$this->input->get('price_min');
+        $price_max = (double)$this->input->get('price_max');
 
         if($limit == 0 || $limit > 20) { $limit = 20; }
 
-        $products = $this->product_model->search($cid, $keyword, $seller_id, $limit, $offset, $order, $sort);
+        $products = $this->product_model->search($cid, $keyword, $seller_id, $price_min, $price_max, $limit, $offset, $order, $sort);
         $resp['retcode'] = 0;
         $resp['msg']     = 'OK';
         $resp['cnt']     = sizeof($products);

@@ -20,5 +20,28 @@ class Site extends Api_Controller {
             response_exit(-1, "no such domain config info");
         }
     }
+
+    public function domain()
+    {
+        $pid = $this->input->get('pid');
+        if(!$pid) {
+            response_exit(-1, "please input pid");
+        }
+
+        $this->load->model('sites_model');
+
+        $results = $this->sites_model->get_by_pid($pid);
+        if(sizeof($results) == 0) {
+            response_exit(-2, "no such pid website config, please check");
+        }
+
+        $domains = [];
+        foreach($results as $r) {
+            array_push($domains, $r->domain_name);
+        }
+
+        response_exit(0, "OK", $domains);
+
+    }
 }
 

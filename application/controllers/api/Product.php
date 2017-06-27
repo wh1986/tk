@@ -105,7 +105,7 @@ class Product extends Api_Controller {
             response_exit(-1, 'no such product');
         }
 
-        $this->product_model->add_visit_count();
+        $this->product_model->add_visit_count($ProductId);
 
         $tpwd_db = $this->product_model->get_taobao_pwd($ProductId, $pid, $product->Quan_id);
         $tpwd_model = "";

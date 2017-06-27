@@ -56,7 +56,7 @@ class Product_model extends Taoke_Model {
     public function get_taobao_pwd($GoodsID, $PID, $QuanID)
     {
         $this->db->select('*')->from('ProductModel')
-            ->where('ProductId', $GoodsID)
+            ->where('GoodsID', $GoodsID)
             ->where('pid', $PID)
             ->where('Quan_id', $QuanID)
             ->limit(1);
@@ -66,13 +66,13 @@ class Product_model extends Taoke_Model {
     public function add_taobao_pwd($GoodsID, $PID, $QuanID, $tpwd)
     {
         $data = [
-            'ProductId'   => $GoodsID,
+            'GoodsID'     => $GoodsID,
             'pid'         => $PID,
             'Quan_id'     => $QuanID,
             'taobaomodel' => $tpwd,
         ];
 
-        return $this->db->insert('ProductModel', $data)
+        return $this->db->insert('ProductModel', $data);
     }
 
     public function add($row)

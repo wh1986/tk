@@ -2,6 +2,11 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
+    public function add_visit_count($ProductId) 
+    {
+
+    }
+
     public function GetCategories()
     {
         return $this->db->get('ProductCategory')->result_array();
@@ -48,9 +53,7 @@ class Product_model extends Taoke_Model {
         return $this->db->get()->row();
     }
 
-    // public function get_tpwd($)
-
-    public function get_taobao_cmd($GoodsID, $PID, $QuanID)
+    public function get_taobao_pwd($GoodsID, $PID, $QuanID)
     {
         $this->db->select('*')->from('ProductModel')
             ->where('ProductId', $GoodsID)
@@ -58,6 +61,18 @@ class Product_model extends Taoke_Model {
             ->where('Quan_id', $QuanID)
             ->limit(1);
         return $this->db->get()->row();
+    }
+
+    public function add_taobao_pwd($GoodsID, $PID, $QuanID, $tpwd)
+    {
+        $data = [
+            'ProductId'   => $GoodsID,
+            'pid'         => $PID,
+            'Quan_id'     => $QuanID,
+            'taobaomodel' => $tpwd,
+        ];
+
+        return $this->db->insert('ProductModel', $data)
     }
 
     public function add($row)

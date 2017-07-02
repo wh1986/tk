@@ -114,7 +114,7 @@ $('#btn-add').click(function(){
     if(domain.length > 10) { toastr.warning("二级域名过长, 请输入小于10位"); return; }
     if(ratio.length == 0) { toastr.warning("请输入分成比例", 1000); return; }
 
-    if(!/[a-zA-Z_0-9]/g.test(domain)) { toastr.warning("二级域名含有非法字符，请确认"); return; }
+    if(!/^[a-zA-Z_0-9]+$/.test(domain)) { toastr.warning("二级域名含有非法字符，请确认"); return; }
 
     $.ajax({
         url:'/ajax/sites/add',

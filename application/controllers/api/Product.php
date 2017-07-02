@@ -95,7 +95,7 @@ class Product extends Api_Controller {
 
             $title = $D_title . "\n原价" . $product->Org_Price .
                 "元,抢券立省" . $product->Quan_price . "元";
-            $tpwd = $this->taobao->tpwd($config->appkey, $config->secret,
+            $tpwd = $this->taobao->tpwd($config->ali_appkey, $config->ali_secret,
                             $product->Pic, $product_url, $title);
 
             if(!$tpwd || !$tpwd->model) {
@@ -138,9 +138,15 @@ class Product extends Api_Controller {
             $domain = str_replace("https://", "", $domain);
         }
 
-        $data = $this->_get_info($domain, $product);
+        $data = null;
+
+        if($domain) {
+            $data = $this->_get_info($domain, $product);
+        }
+
         if(!$data) {
-            $data = $this->_get_info("gaoshiqing.mytaoke.cn", $product);
+            $domain = "gaoshiqing.mytaoke.cn";
+            $data = $this->_get_info($domain, $product);
         }
 
         $data['domain'] = $domain;

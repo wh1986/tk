@@ -139,6 +139,12 @@ class Product extends Api_Controller {
             $domain = str_replace("https://", "", $domain);
         }
 
+        $domain_r = explode(".", $domain);
+        $domain_cnt = sizeof($domain_r);
+        if( $domain_cnt > 3) {
+            $domain = $domain_r[$domain_cnt - 3] . '.' . $domain_r[$domain_cnt - 2] . '.' . $domain_r[$domain_cnt - 1];
+        }
+
         $data = null;
 
         if($domain) {

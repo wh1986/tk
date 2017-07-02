@@ -2,9 +2,12 @@
 defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Product_model extends Taoke_Model {
-    public function add_visit_count($ProductId)
+    public function add_visit_count($ProductId, $pid)
     {
-
+        $this->db->where('pid', $pid)
+            ->where('GoodsID', $ProductId);
+        $this->db->set('visit_cnt', 'visit_cnt+1', FALSE);
+        $this->db->update('ProductModel');
     }
 
     public function GetCategories()

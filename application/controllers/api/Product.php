@@ -79,6 +79,7 @@ class Product extends Api_Controller {
         $tpwd_model = "";
         if($tpwd_db) {
             $tpwd_model = $tpwd_db->taobaomodel;
+            $this->product_model->add_visit_count($ProductId, $pid);
         } else {
             // 根据域名获取appkey 
             $config = $this->sites_model->get_config($domain);

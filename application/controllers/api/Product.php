@@ -126,7 +126,7 @@ class Product extends Api_Controller {
             $title = $D_title . "\n原价" . $product->Org_Price .
                 "元,抢券立省" . $product->Quan_price . "元";
             $tpwd = $this->taobao->tpwd(
-                "24358350", "0115701fb9b4a2f3d6f7b1a4a4f6d7dc",
+                "24358350", "43cd8c5ad6b8d4f7213f71745f9f5996",
                 $product->Pic, $product_url, $title);
 
             $tpwd_model = $tpwd->model;

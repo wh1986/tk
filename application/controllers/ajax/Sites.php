@@ -8,6 +8,27 @@ class Sites extends Ajax_Controller {
         $this->load->model('Sites_model');
     }
 
+    public function alitest()
+    {
+        $this->load->library('taobao');
+
+        $appkey = $this->input->post('appkey');
+        $secret = $this->input->post('secret');
+
+
+        $tpwd = $this->taobao->tpwd(
+            $appkey, $secret, "http://mytaoke.cn/1.png", "http://item.taobao.com/item.htm?id=6827472963", "alitest");
+        if($tpwd->model) {
+            response_exit(0, 'OK');
+        } else {
+            if($tpwd->msg) {
+                response_exit(-1, "测试失败, 原因:$tpwd->msg");
+            } else {
+                response_exit(-1, "测试失败");
+            }
+        }
+    }
+
     public function config()
     {
         $this->check_session();

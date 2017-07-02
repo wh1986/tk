@@ -53,6 +53,7 @@
     <div class="col-sm-2">  </div>
     <div class="col-sm-4">
         <button type="button" class="btn btn-primary" id="btn-ok"> 确定 </button>
+        <button type="button" class="btn btn-primary" id="btn-test"> 测试阿里AppKey </button>
     </div>
 </div>
 
@@ -86,6 +87,31 @@ $('#btn-ok').click(function(){
         success:function(data){
             if(data['retcode'] == 0) {
                 toastr.info("操作成功！");
+            } else {
+                toastr.error(data['msg']);
+            }
+        },
+        error: function(res) {
+            toastr.error("操作失败！");
+        }
+    });
+});
+
+$('#btn-test').click(function(){
+    var appkey      = $('#txt-appkey').val().trim();
+    var secret      = $('#txt-secret').val().trim();
+
+    if(appkey == "") { toastr.warning("请输入阿里appkey"); return; }
+    if(secret == "") { toastr.warning("请输入阿里secret"); return; }
+
+    $.ajax({
+        url:'/ajax/sites/alitest',
+        type:'post',
+        dataType:'json',
+        data:{appkey:appkey, secret:secret},
+        success:function(data){
+            if(data['retcode'] == 0) {
+                toastr.info("测试成功！");
             } else {
                 toastr.error(data['msg']);
             }

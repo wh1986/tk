@@ -62,42 +62,65 @@ class Product extends Api_Controller {
         echo json_encode($resp);
     }
 
-    public function info()
+    protected function _get_info($domain, $product)
     {
-        $this->load->model('product_model');
-        $this->load->model('sites_model');
-        $this->load->library('taobao');
-
-        $domain = $this->input->get_request_header('Origin');
-        if(!$domain) {
-            $domain = $this->input->get('domain');
-            if(!$domain) {
-                $domain = "gaoshiqing.mytaoke.cn";
-            }
-        } else {
-            $domain = str_replace("http://", "", $domain);
-            $domain = str_replace("https://", "", $domain);
-        }
-
         $pid = "defaultpid";
+        $ProductId = $product->GoodsID;
 
         // 根据域名获取pid
         $site = $this->sites_model->get_by_domain($domain);
         if($site) {
             $pid = $site->pid;
         } else {
-            $domain = "gaoshiqing.mytaoke.cn";
-            $site = $this->sites_model->get_by_domain($domain);
-            if($site) {
-                $pid = $site->pid;
-            }
+            return null;
         }
 
-        // 获取商品信息
-        $ProductId = $this->input->post("ProductId");
-        if(!$ProductId) {
-            $ProductId = $this->input->get("ProductId");
+        $tpwd_db = $this->product_model->get_taobao_pwd($ProductId, $pid, $product->Quan_id);
+        $tpwd_model = "";
+        if($tpwd_db) {
+            $tpwd_model = $tpwd_db->taobaomodel;
+        } else {
+            // 根据域名获取appkey 
+            $config = $this->sites_model->get_config($domain);
+            if(!$config) { return null; }
+
+            // 获取淘口令
+            $product_url = $this->taobao->genernate_product_url(
+                                $ProductId, $pid, $product->Quan_id);
+
+            $D_title = $product->D_title;
+            if(mb_strlen($D_title) > 10) {
+                $D_title = mb_substr($D_title, 0, 10) . "...";
+            }
+
+            $title = $D_title . "\n原价" . $product->Org_Price .
+                "元,抢券立省" . $product->Quan_price . "元";
+            $tpwd = $this->taobao->tpwd($config->appkey, $config->secret,
+                            $product->Pic, $product_url, $title);
+
+            if(!$tpwd || !$tpwd->model) {
+                return null;
+            }
+
+            $tpwd_model = $tpwd->model;
+            $this->product_model->add_taobao_pwd($ProductId, $pid, $product->Quan_id, $tpwd_model);
         }
+
+        $data = $this->product_to_json($product);
+        $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd_model";
+        $data['domain'] = $domain;
+
+        return $data;
+    }
+
+    public function info()
+    {
+        $this->load->model('product_model');
+        $this->load->model('sites_model');
+        $this->load->library('taobao');
+
+        // 获取商品信息
+        $ProductId = $this->input->get("ProductId");
         if(!$ProductId) {
             response_exit(-1, 'please input product id');
         }
@@ -107,39 +130,19 @@ class Product extends Api_Controller {
             response_exit(-1, 'no such product');
         }
 
-        $this->product_model->add_visit_count($ProductId);
-
-        $tpwd_db = $this->product_model->get_taobao_pwd($ProductId, $pid, $product->Quan_id);
-        $tpwd_model = "";
-        if($tpwd_db) {
-            $tpwd_model = $tpwd_db->taobaomodel;
+        $domain = $this->input->get_request_header('Origin');
+        if(!$domain) {
+            $domain = $this->input->get('domain');
         } else {
-            // 获取淘口令
-            $product_url = $this->taobao->genernate_product_url(
-                                        $ProductId, $pid, $product->Quan_id);
-
-            $D_title = $product->D_title;
-            if(mb_strlen($D_title) > 10) {
-                $D_title = mb_substr($D_title, 0, 10) . "...";
-            }
-
-            $title = $D_title . "\n原价" . $product->Org_Price .
-                "元,抢券立省" . $product->Quan_price . "元";
-            $tpwd = $this->taobao->tpwd(
-                "24358350", "43cd8c5ad6b8d4f7213f71745f9f5996",
-                $product->Pic, $product_url, $title);
-
-            $tpwd_model = $tpwd->model;
-
-            if($tpwd_model) {
-                $this->product_model->add_taobao_pwd($ProductId, $pid, $product->Quan_id, $tpwd_model);
-            }
+            $domain = str_replace("http://", "", $domain);
+            $domain = str_replace("https://", "", $domain);
         }
 
-        // echo $title;
+        $data = $this->_get_info($domain, $product);
+        if(!$data) {
+            $data = $this->_get_info("gaoshiqing.mytaoke.cn", $product);
+        }
 
-        $data = $this->product_to_json($product);
-        $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd_model";
         $data['domain'] = $domain;
 
         response_exit(0, 'OK', $data);

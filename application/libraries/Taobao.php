@@ -17,6 +17,24 @@ class Taobao {
         return $resp;
     }
 
+    /*
+    public function tbkprivilege($ProductId, $pid, $platform) 
+    {
+        $c = new TopClient;
+        $c->appkey = $appkey;
+        $c->secretKey = $secret;
+        $req = new TbkPrivilegeGetRequest;
+        $req->setItemId($ProductId);
+        $req->setAdzoneId("123");
+        $req->setPlatform($platform);
+        $req->setSiteId("1");
+
+        $resp = $c->execute($req, $sessionKey);
+
+        return $resp;
+    } 
+    */
+
     public function genernate_product_url($product_id, $pid, $coupon_id)
     {
         return "https://uland.taobao.com/coupon/edetail?activityId=$coupon_id&pid=$pid&itemId=$product_id";

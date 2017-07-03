@@ -8,7 +8,7 @@ class Product extends Api_Controller {
 
         $data = $this->product_model->GetCategories();
         foreach($data as &$r) {
-            $r['icon'] = 'http://cms.mytaoke.cn/static/icons/' . $r['icon'];
+            $r['icon'] = 'http://cms.xmfdate.com/static/icons/' . $r['icon'];
         }
 
         response_exit(0, 'OK', $data);
@@ -177,7 +177,7 @@ class Product extends Api_Controller {
         }
 
         if(!$data) {
-            $domain = "gaoshiqing.mytaoke.cn";
+            $domain = "gaoshiqing.xmfdate.com";
             $data = $this->_get_info($domain, $product);
         }
 

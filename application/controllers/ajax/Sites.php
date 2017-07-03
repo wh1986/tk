@@ -87,7 +87,7 @@ class Sites extends Ajax_Controller {
         if($site_id > 0) {
             echo json_encode($this->Sites_model->modify($site_id, $this->user_id, $data));
         } else {
-            if($data['domain_name'] == "cms.mytaoke.cn") {
+            if($data['domain_name'] == "cms.xmfdate.com") {
                 response_exit(-1, "该域名已经被使用");
             }
             echo json_encode($this->Sites_model->add($data));

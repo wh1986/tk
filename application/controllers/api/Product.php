@@ -62,6 +62,21 @@ class Product extends Api_Controller {
         echo json_encode($resp);
     }
 
+    public function _update_privilege($config, $ProductId, $pid)
+    {
+        if($config->session){
+            $privilege = $this->taobao->tbkprivilege2($config->session, 
+                                    $ProductId, $pid);
+            if($privilege && $privilege->coupon_click_url) {
+                $privilege_data = [
+                    'coupon_click_url' => $privilege->coupon_click_url,
+                    'max_commission_rate' => $privilege->max_commission_rate
+                ];
+                $this->product_model->update_privilege($ProductId, $pid, $privilege_data);
+            }
+        }
+    }
+
     protected function _get_info($domain, $product)
     {
         $pid = "defaultpid";
@@ -80,24 +95,18 @@ class Product extends Api_Controller {
         if($tpwd_db) {
             $tpwd_model = $tpwd_db->taobaomodel;
             $this->product_model->add_visit_count($ProductId, $pid);
+
+            // 申请高佣
+            if(!$tpwd_db->coupon_click_url) {
+                $config = $this->sites_model->get_config($domain);
+                if(!$config) { return null; }
+
+                $this->_update_privilege($config, $ProductId, $pid);
+            }
         } else {
             // 根据域名获取appkey 
             $config = $this->sites_model->get_config($domain);
             if(!$config) { return null; }
-
-            // 申请高佣
-            if($config->session){
-                $privilege = $this->taobao->tbkprivilege2($config->session, 
-                                        $ProductId, $pid);
-                var_dump($privilege);
-                if($privilege && $privilege->coupon_click_url) {
-                    $privilege_data = [
-                        'coupon_click_url' => $privilege->coupon_click_url,
-                        'max_commission_rate' => $privilege->max_commission_rate
-                    ];
-                    $this->product_model->update_privilege($ProductId, $pid, $privilege_data);
-                }
-            }
 
             // 获取淘口令
             $product_url = $this->taobao->genernate_product_url(
@@ -120,19 +129,7 @@ class Product extends Api_Controller {
             $tpwd_model = $tpwd->model;
             $this->product_model->add_taobao_pwd($ProductId, $pid, $product->Quan_id, $tpwd_model);
 
-            // 申请高佣
-            if($config->session){
-                $privilege = $this->taobao->tbkprivilege2($config->session, 
-                                        $ProductId, $pid);
-                if($privilege && $privilege->coupon_click_url) {
-                    $privilege_data = [
-                        'coupon_click_url' => $privilege->coupon_click_url,
-                        'max_commission_rate' => $privilege->max_commission_rate
-                    ];
-                    $this->product_model->update_privilege($ProductId, $pid, $privilege_data);
-                }
-            }
-
+            $this->_update_privilege($config, $ProductId, $pid);
         }
 
         $data = $this->product_to_json($product);

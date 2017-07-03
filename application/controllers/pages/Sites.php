@@ -34,11 +34,15 @@ class Sites extends Taoke_Controller {
             $datas['domain'] = '';
             $datas['appkey'] = '';
             $datas['secret'] = '';
+            $datas['session'] = '';
+            $datas['token']   = '';
         } else {
             $datas['name']   = $config->web_name;
             $datas['domain'] = $config->domain_name;
             $datas['appkey'] = $config->ali_appkey;
             $datas['secret'] = $config->ali_secret;
+            $datas['session'] = $config->session;
+            $datas['token']   = $config->refresh_token;
         }
 
         $this->add_user_info($datas);

@@ -17,23 +17,50 @@ class Taobao {
         return $resp;
     }
 
-    /*
-    public function tbkprivilege($ProductId, $pid, $platform) 
+    public function tbkprivilege2($session, $ProductId, $pid) 
     {
+        $url = 'http://wx.cnexce.com/api/privilege';
+
+        $aid = 'c755834dd3666fc32178e8f75ffa448e';
+        $token = '9df6fc3aa35f3fd6';
+
+        $post = "aid=$aid&token=$token&sid=$session&pid=$pid&cid=$ProductId";
+
+        $ch = curl_init();
+
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $post);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/x-www-form-urlencoded'));
+
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+
+        $output = curl_exec ($ch);
+
+        curl_close($ch);
+
+        return json_decode($output);
+    }
+
+    public function tbkprivilege($appkey, $secret, $ProductId, $pid, $platform) 
+    {
+        $array = explode($pid, '_');
+        $adzone_id = $array[3];
+        $site_id = $array[2];
+
         $c = new TopClient;
         $c->appkey = $appkey;
         $c->secretKey = $secret;
         $req = new TbkPrivilegeGetRequest;
         $req->setItemId($ProductId);
-        $req->setAdzoneId("123");
+        $req->setAdzoneId($adzone_id);
         $req->setPlatform($platform);
-        $req->setSiteId("1");
+        $req->setSiteId($site_id);
 
         $resp = $c->execute($req, $sessionKey);
 
         return $resp;
     } 
-    */
 
     public function genernate_product_url($product_id, $pid, $coupon_id)
     {

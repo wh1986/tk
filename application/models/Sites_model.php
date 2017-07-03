@@ -43,6 +43,14 @@ class Sites_model extends Taoke_Model {
         return $this->db->where('pid', $pid)->get('websites')->result();
     }
 
+    public function update_session($data)
+    {
+        $this->db->where('user_id', $data['user_id']);
+        $this->db->update('web_config', $data);
+
+        return $this->update_return();
+    }
+
     public function modify($site_id, $user_id, $data)
     {
         $is_exist = $this->db->select('count(*) as cnt')

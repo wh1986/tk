@@ -34,11 +34,13 @@ class Sites extends Ajax_Controller {
         $this->check_session();
 
         $data = [
-            'user_id'   => $this->user_id,
-            'web_name'    => $this->input->post('name'),
-            'domain_name' => $this->input->post('domain_name'),
-            'ali_appkey'  => $this->input->post('appkey'),
-            'ali_secret'  => $this->input->post('secret'),
+            'user_id'       => $this->user_id,
+            'web_name'      => $this->input->post('name'),
+            'domain_name'   => $this->input->post('domain_name'),
+            'ali_appkey'    => $this->input->post('appkey'),
+            'ali_secret'    => $this->input->post('secret'),
+            'session'       => $this->input->post('session'),
+            'refresh_token' => $this->input->post('token'),
         ];
 
         echo json_encode($this->Sites_model->update_config($data));

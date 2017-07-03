@@ -90,6 +90,15 @@ class Product_model extends Taoke_Model {
         return $this->db->insert('ProductModel', $data);
     }
 
+    public function update_privilege($ProductId, $pid, $data)
+    {
+        $this->db->where('GoodsID', $ProductId);
+        $this->db->where('pid', $pid);
+        $this->db->update('ProductModel', $data);
+
+        return $this->update_return();
+    }
+
     public function add($row)
     {
         if($this->exist($row->GoodsID)){

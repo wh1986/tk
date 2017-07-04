@@ -5,14 +5,14 @@
                 <label for="txt-name" class="col-sm-2 control-label">
                     网站名称 <span style="color:red">*</span>
                 </label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <input type="text" class="form-control" id="txt-name" placeholder="请输入网站名称" value="<?php echo $name; ?>" />
                 </div>
             </div>
             <!--
             <div class="form-group">
                 <label for="txt_logo" class="col-sm-2 control-label">LOGO</label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <div class="input-group">
                         <input type="text" class="form-control" readonly id="txt-logo-file" />
                         <span type="button" class="btn input-group-addon" id="btn-logo-file">浏览</span>
@@ -26,31 +26,31 @@
                 <label for="txt-domain" class="col-sm-2 control-label">
                     私有域名
                 </label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <input type="text" class="form-control" id="txt-domain" placeholder="可不填, 例如 baidu.com, 不要www" value="<?php echo $domain; ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="txt-appkey" class="col-sm-2 control-label">
-                    阿里AppKey <span style="color:red">*</span>
+                    阿里妈妈AppKey <span style="color:red">*</span>
                 </label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="txt-appkey" placeholder="请输入阿里AppKey" value="<?php echo $appkey; ?>" />
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="txt-appkey" placeholder="请输入阿里妈妈AppKey" value="<?php echo $appkey; ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="txt-secret" class="col-sm-2 control-label">
-                    阿里Secret <span style="color:red">*</span>
+                    阿里妈妈Secret <span style="color:red">*</span>
                 </label>
-                <div class="col-sm-4">
-                    <input type="text" class="form-control" id="txt-secret" placeholder="请输入阿里Secret" value="<?php echo $secret; ?>" />
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="txt-secret" placeholder="请输入阿里妈妈Secret" value="<?php echo $secret; ?>" />
                 </div>
             </div>
             <div class="form-group">
                 <label for="txt-session" class="col-sm-2 control-label">
                     高佣Session 
                 </label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <input type="text" class="form-control" id="txt-session" placeholder="从阿里授权获取" value="<?php echo $session; ?>" />
                 </div>
             </div>
@@ -58,7 +58,7 @@
                 <label for="txt-token" class="col-sm-2 control-label">
                     高佣Token 
                 </label>
-                <div class="col-sm-4">
+                <div class="col-sm-5">
                     <input type="text" class="form-control" id="txt-token" placeholder="从阿里授权获取" value="<?php echo $token; ?>" />
                 </div>
             </div>
@@ -67,10 +67,10 @@
 </div>
 <div class="row">
     <div class="col-sm-2">  </div>
-    <div class="col-sm-4">
-        <button type="button" class="btn btn-primary" id="btn-ok"> 确定 </button>
-        <button type="button" class="btn btn-primary" id="btn-test"> 测试阿里AppKey </button>
-        <a href="https://oauth.taobao.com/authorize?response_type=token&client_id=23196777&state=1212&view=web" target="__blank" type="button" class="btn btn-primary" id="btn-auth"> 去阿里授权</a>
+    <div class="col-sm-10">
+        <button type="button" class="btn btn-primary" id="btn-test"> 测试阿里妈妈AppKey </button>
+        <a href="https://oauth.taobao.com/authorize?response_type=token&client_id=23196777&state=1212&view=web" target="__blank" type="button" class="btn btn-primary" id="btn-auth"> 去阿里授权后,填写获取的session和token</a>
+		<button type="button" class="btn btn-primary" id="btn-ok"> 确定 </button>
     </div>
 </div>
 
@@ -95,8 +95,8 @@ $('#btn-ok').click(function(){
     var token       = $('#txt-token').val().trim();
 
     if(name == "") { toastr.warning("请输入网站名称"); return; }
-    if(appkey == "") { toastr.warning("请输入阿里appkey"); return; }
-    if(secret == "") { toastr.warning("请输入阿里secret"); return; }
+    if(appkey == "") { toastr.warning("请输入阿里妈妈appkey"); return; }
+    if(secret == "") { toastr.warning("请输入阿里妈妈secret"); return; }
 
     $.ajax({
         url:'/ajax/sites/config',
@@ -120,8 +120,8 @@ $('#btn-test').click(function(){
     var appkey      = $('#txt-appkey').val().trim();
     var secret      = $('#txt-secret').val().trim();
 
-    if(appkey == "") { toastr.warning("请输入阿里appkey"); return; }
-    if(secret == "") { toastr.warning("请输入阿里secret"); return; }
+    if(appkey == "") { toastr.warning("请输入阿里妈妈appkey"); return; }
+    if(secret == "") { toastr.warning("请输入阿里妈妈secret"); return; }
 
     $.ajax({
         url:'/ajax/sites/alitest',

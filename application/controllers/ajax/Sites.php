@@ -41,7 +41,18 @@ class Sites extends Ajax_Controller {
             'ali_secret'    => $this->input->post('secret'),
             'session'       => $this->input->post('session'),
             'refresh_token' => $this->input->post('token'),
+            'roottxt'       => $this->input->post('roottxt'),
+            'domain_ali'    => $this->input->post('domain_ali')
         ];
+
+        $roottxt = $this->input->post('roottxt');
+
+        if(preg_match("/^[a-za-z0-9_]+$/", $roottxt)) {
+            $path = BASEPATH . "../../tkshop/roots/" . $this->input->post('domain_ali') . ".txt";
+            $cmd = "echo $roottxt > $path";
+            system($cmd);
+            // echo $cmd;
+        }
 
         echo json_encode($this->Sites_model->update_config($data));
     }

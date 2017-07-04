@@ -80,6 +80,12 @@ class Sites_model extends Taoke_Model {
         return $this->insert_return();
     }
 
+    public function get_domains($user_id)
+    {
+        $this->db->where('user_id', $user_id);
+        return $this->db->get('websites')->result();
+    }
+
     public function add($data)
     {
         $is_exist = $this->db->select('count(*) as cnt')

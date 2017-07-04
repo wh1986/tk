@@ -31,6 +31,30 @@
                 </div>
             </div>
             <div class="form-group">
+                <label for="txt-domain" class="col-sm-2 control-label">
+                    阿里认证域名 <span style="color:red">*</span>
+                </label>
+                <div class="col-sm-5">
+                    <select id="combo-domain" class="selectpicker  form-control">
+                        <?php foreach($domains as $r):?>
+                        <?php if($r==$domain_ali): ?>
+                        <option selected><?php echo $r; ?></option>
+                        <?php else: ?>
+                        <option><?php echo $r; ?></option>
+                        <?php endif ?>
+                        <?php endforeach ?>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="txt-appkey" class="col-sm-2 control-label">
+                    阿里认证root.txt <span style="color:red">*</span>
+                </label>
+                <div class="col-sm-5">
+                    <input type="text" class="form-control" id="txt-roottxt" placeholder="请输入阿里认证root.txt中的内容" value="<?php echo $roottxt; ?>" />
+                </div>
+            </div>
+            <div class="form-group">
                 <label for="txt-appkey" class="col-sm-2 control-label">
                     阿里妈妈AppKey <span style="color:red">*</span>
                 </label>
@@ -93,16 +117,19 @@ $('#btn-ok').click(function(){
     var secret      = $('#txt-secret').val().trim();
     var session     = $('#txt-session').val().trim();
     var token       = $('#txt-token').val().trim();
+    var roottxt     = $('#txt-roottxt').val().trim();
+    var domain_ali  = $('#combo-domain').val().trim();
 
-    if(name == "") { toastr.warning("请输入网站名称"); return; }
-    if(appkey == "") { toastr.warning("请输入阿里妈妈appkey"); return; }
-    if(secret == "") { toastr.warning("请输入阿里妈妈secret"); return; }
+    if(name    == "") { toastr.warning("请输入网站名称");               return; }
+    if(appkey  == "") { toastr.warning("请输入阿里妈妈appkey");         return; }
+    if(secret  == "") { toastr.warning("请输入阿里妈妈secret");         return; }
+    if(roottxt == "") { toastr.warning("请输入阿里认证root.txt中内容"); return; }
 
     $.ajax({
         url:'/ajax/sites/config',
         type:'post',
         dataType:'json',
-        data:{name:name, domain_name:domain_name, appkey:appkey, secret:secret, session:session, token:token},
+        data:{name:name, domain_name:domain_name, appkey:appkey, secret:secret, session:session, token:token, domain_ali:domain_ali, roottxt:roottxt},
         success:function(data){
             if(data['retcode'] == 0) {
                 toastr.info("操作成功！");

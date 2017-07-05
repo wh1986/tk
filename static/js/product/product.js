@@ -55,6 +55,12 @@ $(function () {
                 align: 'center'
             },
             {
+                field: 'utime',
+                title: '更新时间',
+                sortable: true,
+                align: 'center'
+            },
+            {
                 title: '操作',
                 align: 'center',
                 events: operateEvents,

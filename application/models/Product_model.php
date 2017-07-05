@@ -99,6 +99,12 @@ class Product_model extends Taoke_Model {
         return $this->update_return();
     }
 
+    public function update($ProductId, $data)
+    {
+        $this->db->where('GoodsID', $ProductId);
+        $this->db->update('Product', $data);
+    }
+
     public function add($row)
     {
         if($this->exist($row->GoodsID)){

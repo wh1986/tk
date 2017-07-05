@@ -144,6 +144,8 @@ class Product_model extends Taoke_Model {
         $this->db->limit($limit, $offset);
         if($sort) {
             $this->db->order_by($sort, $order);
+        } else {
+            $this->db->order_by('utime', 'desc');
         }
 
         return $this->db->get()->result_array();

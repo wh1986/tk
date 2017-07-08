@@ -67,8 +67,17 @@ class Task extends CI_Controller {
 
         set_time_limit(0);
 
+        $dataoke_appkeys = ['xfaijvcgvq', 'b6g2vzlwop'];
+        $timestamp = (int)(time() / 60 / 60 / 24);
+        $dataoke_appkey = $dataoke_appkeys[$timestamp % sizeof($dataoke_appkeys)];
+
+        echo $timestamp;
+        echo "<br />";
+        echo $dataoke_appkey;
+        // return;
+
         $page = 1;
-        $products = $this->dataoke->total('xfaijvcgvq', $page);
+        $products = $this->dataoke->total($dataoke_appkey, $page);
         while ($products && $page < 1000) {
             $rows = $products->result;
             echo "Fetch page:$page size:" . sizeof($rows) . " <br />";

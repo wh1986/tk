@@ -65,8 +65,9 @@ class Product extends Api_Controller {
     public function _update_privilege($config, $ProductId, $pid)
     {
         if($config->session){
-            $privilege = $this->taobao->tbkprivilege2($config->session, 
-                                    $ProductId, $pid);
+            // $privilege = $this->taobao->tbkprivilege2($config->session, 
+            //                         $ProductId, $pid);
+            $privilege = $this->taobao->tbkprivilege('24358065', '48c118ea88ebd42da2155380516f98b3', $config->session, $ProductId, $pid);
             if($privilege && $privilege->coupon_click_url) {
                 $privilege_data = [
                     'coupon_click_url' => $privilege->coupon_click_url,

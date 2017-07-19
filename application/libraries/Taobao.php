@@ -42,9 +42,9 @@ class Taobao {
         return json_decode($output);
     }
 
-    public function tbkprivilege($appkey, $secret, $ProductId, $pid, $platform) 
+    public function tbkprivilege($appkey, $secret, $sessionKey, $ProductId, $pid, $platform = 2) 
     {
-        $array = explode($pid, '_');
+        $array = explode('_', $pid);
         $adzone_id = $array[3];
         $site_id = $array[2];
 

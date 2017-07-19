@@ -59,9 +59,9 @@ class TbkPrivilegeGetRequest
 	
 	public function check()
 	{
-		RequestCheckUtil::checkNotNull($this->fields,   "item_id");
-		RequestCheckUtil::checkNotNull($this->numIids,  "adzone_id");
-		RequestCheckUtil::checkNotNull($this->numIids,  "site_id");
+		RequestCheckUtil::checkNotNull($this->item_id,   "item_id");
+		RequestCheckUtil::checkNotNull($this->adzone_id,  "adzone_id");
+		RequestCheckUtil::checkNotNull($this->site_id,  "site_id");
 	}
 	
 	public function putOtherTextParam($key, $value) {

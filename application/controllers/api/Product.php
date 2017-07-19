@@ -68,10 +68,10 @@ class Product extends Api_Controller {
             // $privilege = $this->taobao->tbkprivilege2($config->session, 
             //                         $ProductId, $pid);
             $privilege = $this->taobao->tbkprivilege('24358065', '48c118ea88ebd42da2155380516f98b3', $config->session, $ProductId, $pid);
-            if($privilege && $privilege->coupon_click_url) {
+            if($privilege && $privilege->result&& $privilege->result->data && $privilege->result->data->coupon_click_url) {
                 $privilege_data = [
-                    'coupon_click_url' => $privilege->coupon_click_url,
-                    'max_commission_rate' => $privilege->max_commission_rate
+                    'coupon_click_url' => $privilege->result->data->coupon_click_url,
+                    'max_commission_rate' => $privilege->result->data->max_commission_rate
                 ];
                 $this->product_model->update_privilege($ProductId, $pid, $privilege_data);
             }

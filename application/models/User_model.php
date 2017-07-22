@@ -21,5 +21,13 @@ class User_model extends Taoke_Model {
 
         return $this->insert_return();
     }
+
+    public function check_secrect($user_id, $secrect)
+    {
+        $this->db->where('user_id', $user_id);
+        $this->db->where('xmf_secret', $secrect);
+
+        return $this->db->get('user_account')->row();
+    }
 }
 

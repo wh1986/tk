@@ -36,7 +36,7 @@ class Product extends Api_Controller {
     public function search()
     {
         // $this->api_model->add_invoke_cnt(1, "xmf.product.search");
-        // $this->load->model('product_model');
+        $this->load->model('product_model');
 
         $cid     = $this->input->get('cid');
         $keyword = urldecode($this->input->get('keyword'));
@@ -67,14 +67,21 @@ class Product extends Api_Controller {
     {
         $this->load->library('taobao');
         $this->load->model('sites_model');
-        // $secrect = $this->input->get('xmfsecrect');
+        $this->load->model('user_model');
+
+        $api_name = "xmf.product.privilege";
 
         $user_id = $this->input->get('xmfappkey');
+        $secrect = $this->input->get('xmfsecrect');
         $gid = $this->input->get("gid");
         $pid = $this->input->get("pid");
 
         if($user_id == "") {
             response_exit(-1, "Please input appkey");
+        }
+
+        if($secrect == "") {
+            response_exit(-1, "Please input secrect");
         }
 
         if($gid == "") {
@@ -83,6 +90,25 @@ class Product extends Api_Controller {
 
         if($pid == "") {
             response_exit(-1, "Please input pid");
+        }
+
+        if(!$this->user_model->check_secrect($user_id, $secrect)) {
+            response_exit(-1, "invalid appkey or secrect");
+        }
+
+        $this->api_model->add_invoke_cnt($user_id, $api_name);
+
+        $invoke_info = $this->api_model->get_invoke_info($user_id, $api_name);
+        if(!$invoke_info) {
+            response_exit(-1, "you are not allowed invoke this api");
+        }
+
+        if($invoke_info->cnt > $invoke_info->cnt_per_day) {
+            response_exit(-1, "you are not allowed invoke this api today");
+        }
+
+        if(strtotime($invoke_info->time_end) < time()) {
+            response_exit(-1, "you are not allowed invoke this api anymore");
         }
 
         $config = $this->sites_model->get_config_by_userid($user_id);

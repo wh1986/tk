@@ -130,23 +130,41 @@ class Product extends Api_Controller {
         response_exit(0, "OK", $response);
     }
 
-    public function _update_privilege($config, $ProductId, $pid)
+    public function _get_privilege($config, $product, $pid, &$data)
     {
         if($config->session){
             $privilege = $this->taobao->tbkprivilege(
                 $this->config->item('TAOBAO_PRIVILEGE_APPKEY'),
                 $this->config->item('TAOBAO_PRIVILEGE_SERECT'),
                 $config->session, 
-                $ProductId, 
+                $product->GoodsID, 
                 $pid);
             if($privilege && $privilege->result&& $privilege->result->data && $privilege->result->data->coupon_click_url) {
-                $privilege_data = [
-                    'coupon_click_url' => $privilege->result->data->coupon_click_url,
-                    'max_commission_rate' => $privilege->result->data->max_commission_rate
-                ];
-                $this->product_model->update_privilege($ProductId, $pid, $privilege_data);
+                $data['coupon_click_url'] = $privilege->result->data->coupon_click_url;
+                $data['max_commission_rate'] = $privilege->result->data->max_commission_rate;
+
+                $tpwd = $this->_get_taopwd($config, $product, $data['coupon_click_url']);
+                if(!$tpwd || !$tpwd->model) {
+                    $data['taobaomodel'] = $tpwd->model;
+                }
             }
         }
+    }
+
+    public function _get_taopwd($config, $product, $url) 
+    {
+        $D_title = $product->D_title;
+        if(mb_strlen($D_title) > 10) {
+            $D_title = mb_substr($D_title, 0, 10) . "...";
+        }
+
+        $title = $D_title . "\n原价" . $product->Org_Price .
+            "元,抢券立省" . $product->Quan_price . "元";
+        $tpwd = $this->taobao->tpwd($config->ali_appkey, $config->ali_secret,
+                        $product->Pic, $url, $title);
+        // var_dump($tpwd);
+        return $tpwd;
+
     }
 
     protected function _get_info($domain, $product)
@@ -162,10 +180,16 @@ class Product extends Api_Controller {
             return null;
         }
 
+        $data_db = [
+            'GoodsID' => $ProductId,
+            'Quan_id' => $product->Quan_id,
+            'pid'     => $pid
+        ];
+            // var_dump($data_db);
+
         $tpwd_db = $this->product_model->get_taobao_pwd($ProductId, $pid, $product->Quan_id);
-        $tpwd_model = "";
-        if($tpwd_db) {
-            $tpwd_model = $tpwd_db->taobaomodel;
+        if($tpwd_db && $tpwd_db->taobaomodel) {
+            $data_db['taobaomodel'] = $tpwd_db->taobaomodel;
             $this->product_model->add_visit_count($ProductId, $pid);
 
             // 申请高佣
@@ -173,39 +197,32 @@ class Product extends Api_Controller {
                 $config = $this->sites_model->get_config($domain);
                 if(!$config) { return null; }
 
-                $this->_update_privilege($config, $ProductId, $pid);
+                $this->_get_privilege($config, $product, $pid, $data_db);
+                $this->product_model->update_taobao_pwd($data_db);
             }
         } else {
             // 根据域名获取appkey 
             $config = $this->sites_model->get_config($domain);
             if(!$config) { return null; }
 
-            // 获取淘口令
-            $product_url = $this->taobao->genernate_product_url(
-                                $ProductId, $pid, $product->Quan_id);
+            $this->_get_privilege($config, $product, $pid, $data_db);
 
-            $D_title = $product->D_title;
-            if(mb_strlen($D_title) > 10) {
-                $D_title = mb_substr($D_title, 0, 10) . "...";
+            if(!array_key_exists('taobaomodel', $data_db)) {
+                // 获取淘口令
+                $product_url = $this->taobao->genernate_product_url($ProductId, $pid, $product->Quan_id);
+
+                $tpwd = $this->_get_taopwd($config, $product, $product_url);
+                if(!$tpwd || !$tpwd->model) {
+                    return null;
+                }
+                $data_db['taobaomodel'] = $tpwd->model;
             }
 
-            $title = $D_title . "\n原价" . $product->Org_Price .
-                "元,抢券立省" . $product->Quan_price . "元";
-            $tpwd = $this->taobao->tpwd($config->ali_appkey, $config->ali_secret,
-                            $product->Pic, $product_url, $title);
-
-            if(!$tpwd || !$tpwd->model) {
-                return null;
-            }
-
-            $tpwd_model = $tpwd->model;
-            $this->product_model->add_taobao_pwd($ProductId, $pid, $product->Quan_id, $tpwd_model);
-
-            $this->_update_privilege($config, $ProductId, $pid);
+            $this->product_model->update_taobao_pwd($data_db);
         }
 
         $data = $this->product_to_json($product);
-        $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买$tpwd_model";
+        $data['ModelTxt'] = "复制框内整段文字，打开手机淘宝即可「领取优惠券」并购买" . $data_db['taobaomodel'];
         $data['domain'] = $domain;
 
         return $data;

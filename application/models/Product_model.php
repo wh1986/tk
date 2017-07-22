@@ -80,16 +80,22 @@ class Product_model extends Taoke_Model {
         return $this->db->get()->row();
     }
 
-    public function add_taobao_pwd($GoodsID, $PID, $QuanID, $tpwd)
+    public function update_taobao_pwd($data)
     {
-        $data = [
-            'GoodsID'     => $GoodsID,
-            'pid'         => $PID,
-            'Quan_id'     => $QuanID,
-            'taobaomodel' => $tpwd,
+        $where = [
+            'GoodsID'     => $data['GoodsID'],
+            'pid'         => $data['pid'],
+            'Quan_id'     => $data['Quan_id']
         ];
 
-        return $this->db->insert('ProductModel', $data);
+        $this->db->where($where);
+
+        if($this->db->get("ProductModel")->row()) {
+            $this->db->where($where);
+            $this->db->update('ProductModel', $data);
+        } else {
+            $this->db->insert('ProductModel', $data);
+        }
     }
 
     public function update_privilege($ProductId, $pid, $data)

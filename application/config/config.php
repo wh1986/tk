@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 
+$config['TAOBAO_PRIVILEGE_APPKEY'] = '24358065';
+$config['TAOBAO_PRIVILEGE_SERECT'] = '48c118ea88ebd42da2155380516f98b3';
+
 /*
 |--------------------------------------------------------------------------
 | Base Site URL

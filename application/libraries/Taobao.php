@@ -45,6 +45,10 @@ class Taobao {
     public function tbkprivilege($appkey, $secret, $sessionKey, $ProductId, $pid, $platform = 2) 
     {
         $array = explode('_', $pid);
+        if(sizeof($array) < 3){
+            return "invalid pid";
+        }
+
         $adzone_id = $array[3];
         $site_id = $array[2];
 

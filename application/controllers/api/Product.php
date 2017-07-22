@@ -35,7 +35,8 @@ class Product extends Api_Controller {
 
     public function search()
     {
-        $this->load->model('product_model');
+        // $this->api_model->add_invoke_cnt(1, "xmf.product.search");
+        // $this->load->model('product_model');
 
         $cid     = $this->input->get('cid');
         $keyword = urldecode($this->input->get('keyword'));
@@ -62,12 +63,56 @@ class Product extends Api_Controller {
         echo json_encode($resp);
     }
 
+    public function privilege()
+    {
+        $this->load->library('taobao');
+        $this->load->model('sites_model');
+        // $secrect = $this->input->get('xmfsecrect');
+
+        $user_id = $this->input->get('xmfappkey');
+        $gid = $this->input->get("gid");
+        $pid = $this->input->get("pid");
+
+        if($user_id == "") {
+            response_exit(-1, "Please input appkey");
+        }
+
+        if($gid == "") {
+            response_exit(-1, "Please input gid");
+        }
+
+        if($pid == "") {
+            response_exit(-1, "Please input pid");
+        }
+
+        $config = $this->sites_model->get_config_by_userid($user_id);
+        if(!$config) {
+            response_exit(-1, "No such appkey config info");
+        }
+
+        if(!$config->session) {
+            response_exit(-1, "Session is empty!");
+        }
+
+        $response = $this->taobao->tbkprivilege(
+                $this->config->item('TAOBAO_PRIVILEGE_APPKEY'),
+                $this->config->item('TAOBAO_PRIVILEGE_SERECT'),
+                $config->session,
+                $gid, 
+                $pid);
+
+        response_exit(0, "OK", $response);
+    }
+
     public function _update_privilege($config, $ProductId, $pid)
     {
         if($config->session){
-            // $privilege = $this->taobao->tbkprivilege2($config->session, 
-            //                         $ProductId, $pid);
-            $privilege = $this->taobao->tbkprivilege('24358065', '48c118ea88ebd42da2155380516f98b3', $config->session, $ProductId, $pid);
+            $privilege = $this->taobao->tbkprivilege(
+                $this->config->item('TAOBAO_PRIVILEGE_APPKEY'),
+                $this->config->item('TAOBAO_PRIVILEGE_SERECT'),
+                $config->session, 
+                $ProductId, 
+                $pid);
             if($privilege && $privilege->coupon_click_url) {
                 $privilege_data = [
                     'coupon_click_url' => $privilege->coupon_click_url,

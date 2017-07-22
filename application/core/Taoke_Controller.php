@@ -43,6 +43,8 @@ class Api_Controller extends CI_Controller {
     {
         parent::__construct();
         header("Access-Control-Allow-Origin:*");
+
+        $this->load->model('api_model');
     }
 }
 
